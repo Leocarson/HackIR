@@ -12,7 +12,7 @@ LookAtSpot = ToastNotifier()
 CurrentTime = [datetime.now().time().hour,datetime.now().time().minute]
 
 
-WaterInterval = [0,30]
+WaterInterval = [0,2]
 WaterTime = [CurrentTime[0] + WaterInterval[0],CurrentTime[1] + WaterInterval[1]]
 if WaterTime[1] > 59:
     WaterTime[1] = WaterTime[1] - 60
