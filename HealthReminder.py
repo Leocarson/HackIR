@@ -12,7 +12,7 @@ LookAtSpot = ToastNotifier()
 
 CurrentTime = [datetime.now().time().hour,datetime.now().time().minute]
 
-WaterInterval = [0,30]
+WaterInterval = [0,1]
 WaterTime = [CurrentTime[0] + WaterInterval[0],CurrentTime[1] + WaterInterval[1]]
 if WaterTime[1] > 59:
     WaterTime[1] = WaterTime[1] - 60
@@ -49,6 +49,7 @@ if StandUpTime[0] > 24:
     StandUpTime[0] = StandUpTime[0] - 24
 StandUpSet = False
 
+LookAtInterval = [0,20]
 LookAtTime = [CurrentTime[0], CurrentTime[1] + 20]
 if LookAtTime[1] > 59:
     LookAtTime[1] = LookAtTime[1] - 60
@@ -58,7 +59,7 @@ if LookAtTime[0] > 24:
 LookAtSet = False
 
 PomTime = [datetime.now().time().hour,datetime.now().time().minute]
-PomInterval = 2
+PomInterval = 1
 ShortBreak = 2
 LongBreak = 5
 PomCount = 0
@@ -66,7 +67,12 @@ PomStatus = 0
 
 PomNotifier = ToastNotifier()
 
+website_list=["facebook.com","www.facebook.com","twitter.com","www.twitter.com"]
+hosts_file = r"C:\Windows\System32\Drivers\etc\hosts"
+redirect = "172.217.10.238"
 
+workTime = True
+blockOn = False
 def Pomodoro():
     global PomTime
     global PomStatus
@@ -112,29 +118,53 @@ def TimerReset(Timer,TimeInterval):
         Timer[0] = Timer[0] - 24
     return Timer
 
-def NotifyAtTime(Time, ToastVar, ToastText, TimeSet, TimeInterval):
-    if Time[0] == datetime.now().time().hour and Time[1] == datetime.now().time().minute and TimeSet == False:
+def NotifyAtTime(Time, ToastVar, ToastText, TimeInterval):
+    if Time[0] == datetime.now().time().hour and Time[1] == datetime.now().time().minute :
         ToastVar.show_toast(AppName, ToastText)
-        TimeSet = True
-        Time = TimeReset(Time,TimeInterval)
-        TimeSet = False
-        return TimeSet,Time
-
+        
+        Time = TimerReset(Time,TimeInterval)
+        
+        return Time
+    return Time
 PomSet(PomInterval)
 
 while True:
     CurrentTime = [datetime.now().time().hour,datetime.now().time().minute]
-    WaterSet, WaterTime = NotifyAtTime(WaterTime, Water, "Drink Water", WaterSet, WaterInterval)
-    BreakfastSet, BreakfastTime = NotifyAtTime(BreakfastTime, Breakfast, "Eat Breakfast", BreakfastSet, BreakfastInterval)
-    LunchSet, LunchTime = NotifyAtTime(LunchTime, Lunch, "Eat Lunch", LunchSet, LunchInterval)
-    DinnerSet, DinnerTime = NotifyAtTime(DinnerTime, Dinner, "Eat Dinner", DinnerSet, DinnerInterval)
-    StandUpSet, StandUpTime = NotifyAtTime(StandUpTime, StandUp, "Stand Up and Stretch", StandUpSet, StandUpInterval)
-    LookAtSet, LookAtTime = NotifyAtTime(LookAtTime, LookAtSpot, "Look at a Spot 20ft Away for 20 Minutes", LookAtSet, LookAtInterval)
+    
+    WaterTime = NotifyAtTime(WaterTime, Water, "Drink Water", WaterInterval)
+    BreakfastTime = NotifyAtTime(BreakfastTime, Breakfast, "Eat Breakfast", [0,1])
+    LunchTime = NotifyAtTime(LunchTime, Lunch, "Eat Lunch", [0,-1])
+    DinnerTime = NotifyAtTime(DinnerTime, Dinner, "Eat Dinner", [0,-1])
+    StandUpTime = NotifyAtTime(StandUpTime, StandUp, "Stand Up and Stretch", StandUpInterval)
+    LookAtTime = NotifyAtTime(LookAtTime, LookAtSpot, "Look at a Spot 20ft Away for 20 Minutes", LookAtInterval)
+    
     Pomodoro()
-##Water.show_toast(AppName, "Drink Water!")
-##Food.show_toast(AppName, "It's Time to Eat " + Meal)
-##StandUp.show_toast(AppName, "Stand up and Stretch!")
-##LookAtSpot.show_toast(AppName, "Look at a Spot 20ft Away for 20 Seconds")
+    
+    if PomStatus == 0 and blockOn != True:
+        f = open(hosts_file, mode = 'a+')
+        content=f.read()
+        i = 0
+        f.seek(22,0)
+        for website in website_list:
+            f.write(redirect+" "+ website + "\n")
+            print("Written Line")
+        blockOn = True
+        f.close()
+        print("Closed File")
+                
+    if PomStatus == 1 and blockOn == True:
+        with open(hosts_file,'r+') as f:
+            content=f.readlines()
+            f.seek(0)
+            for line in content:
+                if not any(website in line for website in website_list):
+                    f.write(line)
+              
+            f.truncate()
+            blockOn = False
+            f.close()
+            print("Closed File")
+
 
 
 
