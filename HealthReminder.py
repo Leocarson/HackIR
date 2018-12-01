@@ -12,7 +12,7 @@ LookAtSpot = ToastNotifier()
 CurrentTime = [datetime.now().time().hour,datetime.now().time().minute]
 
 
-WaterInterval = [0,2]
+WaterInterval = [0,1]
 WaterTime = [CurrentTime[0] + WaterInterval[0],CurrentTime[1] + WaterInterval[1]]
 if WaterTime[1] > 59:
     WaterTime[1] = WaterTime[1] - 60
@@ -104,7 +104,7 @@ def PomSet(PomIncrease):
     PomTime = [PomTime[0], PomTime[1] + PomIncrease]
     if PomTime[1] > 59:
         PomTime[1] = PomTime[1] - 60
-        PomeTime[0] += 1
+        PomTime[0] += 1
     if PomTime[0] > 24:
         PomTime[0] = PomTime[0] - 24
 
