@@ -1,6 +1,5 @@
 from win10toast import ToastNotifier
 from datetime import datetime
-
 AppName = ("Test App")
 
 Water = ToastNotifier()
@@ -12,7 +11,8 @@ LookAtSpot = ToastNotifier()
 
 CurrentTime = [datetime.now().time().hour,datetime.now().time().minute]
 
-WaterInterval = [0,1]
+
+WaterInterval = [0,30]
 WaterTime = [CurrentTime[0] + WaterInterval[0],CurrentTime[1] + WaterInterval[1]]
 if WaterTime[1] > 59:
     WaterTime[1] = WaterTime[1] - 60
@@ -22,19 +22,19 @@ if WaterTime[0] > 24:
 print(WaterTime)
 WaterSet = False
 
-BreakfastTimeInput = "7:00"
+BreakfastTimeInput = input("Input what time you eat Breakfast (24-hour): ")
 BreakfastTime = [0,0]
 BreakfastTime[0] = int(BreakfastTimeInput.split(":")[0])
 BreakfastTime[1] = int(BreakfastTimeInput.split(":")[1])
 BreakfastSet = False
 
-LunchTimeInput = "12:00"
+LunchTimeInput = input("Input what time you eat Lunch (24-hour): ")
 LunchTime = [0,0]
 LunchTime[0] = int(LunchTimeInput.split(":")[0])
 LunchTime[1] = int(LunchTimeInput.split(":")[1])
 LunchSet = False
 
-DinnerTimeInput = "19:00"
+DinnerTimeInput = input("Input what time you eat Dinner (24-Hour): ")
 DinnerTime = [0,0]
 DinnerTime[0] = int(DinnerTimeInput.split(":")[0])
 DinnerTime[1] = int(DinnerTimeInput.split(":")[1])
@@ -59,9 +59,9 @@ if LookAtTime[0] > 24:
 LookAtSet = False
 
 PomTime = [datetime.now().time().hour,datetime.now().time().minute]
-PomInterval = 1
-ShortBreak = 2
-LongBreak = 5
+PomInterval = 25
+ShortBreak = 5
+LongBreak = 20
 PomCount = 0
 PomStatus = 0
 
@@ -127,6 +127,8 @@ def NotifyAtTime(Time, ToastVar, ToastText, TimeInterval):
         return Time
     return Time
 PomSet(PomInterval)
+
+
 
 while True:
     CurrentTime = [datetime.now().time().hour,datetime.now().time().minute]
