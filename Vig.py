@@ -76,14 +76,4 @@ while True:
             k[i] = findKey(en, pl)
         print("Key: ", k)
         print("Encryption: ", decrypt(s, k))
-    
-        
-
-
-    
-            
-            
-    
-    
-
-            
+#boop
