@@ -20,25 +20,26 @@ if WaterTime[1] > 59:
 if WaterTime[0] > 24:
     WaterTime[0] = WaterTime[0] - 24
 print(WaterTime)
-WaterSet = False
+WaterSet = True
 
+FoodSet = False
 BreakfastTimeInput = input("Input what time you eat Breakfast (24-hour): ")
 BreakfastTime = [0,0]
 BreakfastTime[0] = int(BreakfastTimeInput.split(":")[0])
 BreakfastTime[1] = int(BreakfastTimeInput.split(":")[1])
-BreakfastSet = False
+
 
 LunchTimeInput = input("Input what time you eat Lunch (24-hour): ")
 LunchTime = [0,0]
 LunchTime[0] = int(LunchTimeInput.split(":")[0])
 LunchTime[1] = int(LunchTimeInput.split(":")[1])
-LunchSet = False
+
 
 DinnerTimeInput = input("Input what time you eat Dinner (24-Hour): ")
 DinnerTime = [0,0]
 DinnerTime[0] = int(DinnerTimeInput.split(":")[0])
 DinnerTime[1] = int(DinnerTimeInput.split(":")[1])
-DinnerSet = False
+
 
 StandUpInterval = [0,15]
 StandUpTime = [CurrentTime[0] + StandUpInterval[0], CurrentTime[1] + StandUpInterval[1]]
@@ -132,13 +133,16 @@ PomSet(PomInterval)
 
 while True:
     CurrentTime = [datetime.now().time().hour,datetime.now().time().minute]
-    
-    WaterTime = NotifyAtTime(WaterTime, Water, "Drink Water", WaterInterval)
-    BreakfastTime = NotifyAtTime(BreakfastTime, Breakfast, "Eat Breakfast", [0,1])
-    LunchTime = NotifyAtTime(LunchTime, Lunch, "Eat Lunch", [0,-1])
-    DinnerTime = NotifyAtTime(DinnerTime, Dinner, "Eat Dinner", [0,-1])
-    StandUpTime = NotifyAtTime(StandUpTime, StandUp, "Stand Up and Stretch", StandUpInterval)
-    LookAtTime = NotifyAtTime(LookAtTime, LookAtSpot, "Look at a Spot 20ft Away for 20 Minutes", LookAtInterval)
+    if WaterSet:
+        WaterTime = NotifyAtTime(WaterTime, Water, "Drink Water", WaterInterval)
+    if FoodSet:
+        BreakfastTime = NotifyAtTime(BreakfastTime, Breakfast, "Eat Breakfast", [0,1])
+        LunchTime = NotifyAtTime(LunchTime, Lunch, "Eat Lunch", [0,-1])
+        DinnerTime = NotifyAtTime(DinnerTime, Dinner, "Eat Dinner", [0,-1])
+    if StandUpSet:
+        StandUpTime = NotifyAtTime(StandUpTime, StandUp, "Stand Up and Stretch", StandUpInterval)
+    if LookAtSet:
+        LookAtTime = NotifyAtTime(LookAtTime, LookAtSpot, "Look at a Spot 20ft Away for 20 Minutes", LookAtInterval)
     
     Pomodoro()
     
